@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Data Analyst to Product Manager: A Practical Roadmap | Raunak Pandey</title>
+    <meta name="description" content="How I made the transition from Data Analyst to Product Manager — and what I wish I'd known earlier.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --bg-card: #141414;
+            --accent: #d4a039;
+            --accent-dim: rgba(212, 160, 57, 0.15);
+            --accent-glow: rgba(212, 160, 57, 0.3);
+            --text-primary: #f5f5f5;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --border: #2a2a2a;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'DM Sans', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-body); background: var(--bg-primary); color: var(--text-primary); line-height: 1.7; font-size: 16px; }
+        ::selection { background: var(--accent); color: var(--bg-primary); }
+        a { color: var(--accent); text-decoration: none; transition: all 0.3s ease; }
+        a:hover { color: var(--text-primary); }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 0; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        nav .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; color: var(--text-primary); }
+        .logo span { color: var(--accent); }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 0.9rem; }
+        .back-link:hover { color: var(--accent); }
+
+        .blog-header { padding: 160px 0 80px; background: var(--bg-secondary); border-bottom: 1px solid var(--border); }
+        .blog-header .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+        .blog-category { display: inline-block; background: var(--accent); color: var(--bg-primary); font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600; padding: 6px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 24px; }
+        .blog-title { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); font-weight: 600; line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.02em; }
+        .blog-subtitle { font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 24px; font-style: italic; }
+        .blog-meta { display: flex; align-items: center; gap: 24px; color: var(--text-secondary); font-size: 0.95rem; flex-wrap: wrap; }
+        .blog-meta-item { display: flex; align-items: center; gap: 8px; }
+        .blog-cover { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin-top: 48px; }
+
+        .blog-content { max-width: 800px; margin: 0 auto; padding: 80px 24px; }
+        .blog-content h2 { font-family: var(--font-display); font-size: 1.75rem; font-weight: 600; margin: 48px 0 24px; color: var(--text-primary); }
+        .blog-content h3 { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; margin: 36px 0 16px; color: var(--text-primary); }
+        .blog-content h4 { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+        .blog-content p { color: var(--text-secondary); margin-bottom: 24px; font-size: 1.1rem; line-height: 1.8; }
+        .blog-content ul, .blog-content ol { color: var(--text-secondary); margin-bottom: 24px; padding-left: 24px; }
+        .blog-content li { margin-bottom: 12px; font-size: 1.1rem; line-height: 1.7; }
+        .blog-content blockquote { border-left: 3px solid var(--accent); padding-left: 24px; margin: 32px 0; font-style: italic; color: var(--text-secondary); }
+        .blog-content strong { color: var(--text-primary); }
+        .blog-content hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .highlight-box { background: var(--accent-dim); border: 1px solid var(--accent); border-radius: 12px; padding: 24px 28px; margin: 32px 0; }
+        .highlight-box h4 { font-family: var(--font-display); font-size: 1.1rem; color: var(--accent); margin-bottom: 12px; }
+        .highlight-box p { margin-bottom: 0; color: var(--text-primary); }
+        .highlight-box ul { margin-bottom: 0; color: var(--text-primary); }
+
+        .author-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; margin-top: 64px; display: flex; gap: 24px; align-items: center; }
+        .author-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .author-info h4 { font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 4px; }
+        .author-info p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 0; }
+
+        footer { padding: 48px 0; border-top: 1px solid var(--border); text-align: center; }
+        footer .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+        footer p { color: var(--text-muted); font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .blog-meta { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .author-section { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="../index.html" class="logo">RP<span>.</span></a>
+            <a href="../index.html#blogs" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to Blogs
+            </a>
+        </div>
+    </nav>
+
+    <header class="blog-header">
+        <div class="container">
+            <span class="blog-category">Career</span>
+            <h1 class="blog-title">From Data Analyst to Product Manager: A Practical Roadmap</h1>
+            <p class="blog-subtitle">How I made the transition — and what I wish I'd known earlier</p>
+            <div class="blog-meta">
+                <div class="blog-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    12 min read
+                </div>
+                <div class="blog-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    January 2025
+                </div>
+                <div class="blog-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Raunak Pandey
+                </div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80" alt="Career transition and growth" class="blog-cover">
+        </div>
+    </header>
+
+    <article class="blog-content">
+        <p>In 2016, I was a Risk Analyst at Amazon, writing SQL queries and building dashboards. By 2019, I was a Product Manager at S&P Global. Today, I lead AI product strategy at Quest Software.</p>
+
+        <p>The transition from data analyst to PM isn't obvious, but it's increasingly common — and for good reason. Data analysts have skills that many traditional PMs lack: comfort with ambiguity, fluency with metrics, and the ability to find truth in messy datasets.</p>
+
+        <p>Here's the honest roadmap I wish someone had given me.</p>
+
+        <hr>
+
+        <h2>Why Data Analysts Make Great PMs</h2>
+
+        <p>Before the "how," let's address the "why." Data analysts have unfair advantages in product management:</p>
+
+        <h3>1. You Already Speak the Language of Evidence</h3>
+
+        <p>Most PMs struggle to be data-informed. They know they should use data, but they don't have the instincts for it. You do. You know when a metric is misleading. You know how to segment. You know that correlation isn't causation.</p>
+
+        <p>This is a superpower. Use it.</p>
+
+        <h3>2. You Understand How Products Actually Work</h3>
+
+        <p>You've seen the data. You know which features get used and which collect dust. You've probably thought "why did they build it this way?" more than once.</p>
+
+        <p>That frustrated curiosity? That's product sense waiting to be channeled.</p>
+
+        <h3>3. You're Comfortable With Uncertainty</h3>
+
+        <p>Data analysis is fundamentally about finding signal in noise. Product management is the same — you're constantly making decisions with incomplete information.</p>
+
+        <p>Analysts who've learned to make recommendations despite uncertainty are already practicing a core PM skill.</p>
+
+        <h3>4. You Have Credibility With Engineering</h3>
+
+        <p>Engineers respect people who can engage with technical details. Your SQL skills, your understanding of data pipelines, your familiarity with system architecture — these build trust that many PMs spend years earning.</p>
+
+        <hr>
+
+        <h2>The Gaps You'll Need to Close</h2>
+
+        <p>Let's be honest about what data analysts typically lack:</p>
+
+        <h3>Gap 1: Customer Empathy</h3>
+
+        <p>Analysts often see users as data points. Rows in a table. Behavioral patterns to be modeled.</p>
+
+        <p>PMs need to see users as humans with frustrations, workarounds, and unspoken needs. This requires a different kind of attention.</p>
+
+        <div class="highlight-box">
+            <h4>How to close it</h4>
+            <p>Start talking to users directly. Not surveys. Not data. Actual conversations. Ask open-ended questions. Listen for emotions, not just facts.</p>
+        </div>
+
+        <h3>Gap 2: Strategic Thinking</h3>
+
+        <p>Analysts are trained to answer questions. PMs need to decide which questions are worth answering.</p>
+
+        <p>This shift — from "given these constraints, what's the answer?" to "given these possibilities, what should we prioritize?" — is harder than it sounds.</p>
+
+        <div class="highlight-box">
+            <h4>How to close it</h4>
+            <p>Practice making recommendations, not just presenting findings. End every analysis with "therefore, we should..." and defend that position.</p>
+        </div>
+
+        <h3>Gap 3: Communication and Influence</h3>
+
+        <p>Data work is often solo. You analyze, you present, you move on.</p>
+
+        <p>PM work is fundamentally collaborative. You need to align stakeholders who have different incentives, communicate across technical and non-technical audiences, and influence people who don't report to you.</p>
+
+        <div class="highlight-box">
+            <h4>How to close it</h4>
+            <p>Volunteer to present your team's work. Practice explaining technical concepts to non-technical audiences. Learn to tell stories with data, not just report numbers.</p>
+        </div>
+
+        <h3>Gap 4: Ownership Mentality</h3>
+
+        <p>Analysts typically own a deliverable — a report, a dashboard, an analysis.</p>
+
+        <p>PMs own an outcome. The difference is profound. When you own an outcome, you can't blame the data, the engineering team, or the requirements. You find a way to make it work.</p>
+
+        <div class="highlight-box">
+            <h4>How to close it</h4>
+            <p>Take ownership of something small but end-to-end. A feature, a process, a problem. See it through from conception to launch to measurement.</p>
+        </div>
+
+        <hr>
+
+        <h2>The Practical Playbook</h2>
+
+        <p>Here's what actually worked for me:</p>
+
+        <h3>Phase 1: Build PM Skills in Your Current Role (3-6 months)</h3>
+
+        <p>You don't need a PM title to do PM work. Start now:</p>
+
+        <h4>1. Get closer to customers</h4>
+
+        <p>Ask to join customer calls. Volunteer to analyze support tickets. Read every piece of customer feedback you can find. Build a reputation as someone who understands users.</p>
+
+        <h4>2. Start making recommendations</h4>
+
+        <p>Don't just deliver analysis — deliver analysis + recommendation. "Based on this data, I recommend we prioritize X because Y."</p>
+
+        <p>Most analysts stop at the data. You'll stand out by going further.</p>
+
+        <h4>3. Understand the roadmap</h4>
+
+        <p>Get access to your product's roadmap. Understand why features were prioritized. Ask PMs about their decision-making process. Learn the vocabulary and frameworks they use.</p>
+
+        <h4>4. Ship something small</h4>
+
+        <p>Find a small improvement — a dashboard, a workflow fix, a minor feature — and own it end-to-end. Write the requirements. Work with engineering. See it through to launch. Measure the impact.</p>
+
+        <p>This is PM work, even without the title.</p>
+
+        <h3>Phase 2: Build Your PM Toolkit (3-6 months)</h3>
+
+        <p>While doing Phase 1, start learning PM fundamentals:</p>
+
+        <h4>Core Concepts</h4>
+        <ul>
+            <li>Product strategy and vision</li>
+            <li>Prioritization frameworks (RICE, MoSCoW, Impact/Effort)</li>
+            <li>User research methods</li>
+            <li>Agile/Scrum mechanics</li>
+            <li>Go-to-market basics</li>
+        </ul>
+
+        <h4>Resources That Actually Helped Me</h4>
+        <ul>
+            <li>"Inspired" by Marty Cagan — the PM bible</li>
+            <li>"Continuous Discovery Habits" by Teresa Torres — modern user research</li>
+            <li>Lenny's Newsletter — practical, current advice</li>
+            <li>Reforge programs — if you can get your company to pay</li>
+        </ul>
+
+        <p><strong>Don't overdo it</strong>. You can read about PM forever. At some point, you need to stop studying and start doing.</p>
+
+        <h3>Phase 3: Make the Move (1-6 months)</h3>
+
+        <p>Two paths:</p>
+
+        <h4>Internal transfer (easier, lower risk)</h4>
+        <ul>
+            <li>Talk to your manager about your interest</li>
+            <li>Identify a team that needs PM help</li>
+            <li>Propose a trial period or rotation</li>
+            <li>Use your internal reputation and relationships</li>
+        </ul>
+
+        <h4>External move (broader options, higher risk)</h4>
+        <ul>
+            <li>Focus on companies where your domain expertise is valuable</li>
+            <li>Emphasize your data skills as a differentiator</li>
+            <li>Be prepared for a title or salary step-back initially</li>
+            <li>Target PM roles at data-heavy companies</li>
+        </ul>
+
+        <p>I took the internal path at S&P Global. I'd built credibility as someone who understood the product deeply and could work with engineering. When a PM role opened, I was a natural fit.</p>
+
+        <hr>
+
+        <h2>The Interview: What to Expect</h2>
+
+        <p>PM interviews for data analysts typically focus on:</p>
+
+        <h3>1. Product Sense Questions</h3>
+        <p>"How would you improve [product]?"<br>"Design a feature for [user problem]."</p>
+
+        <p><strong>Your advantage:</strong> Use data to inform your answer. "I'd want to analyze user behavior to identify the biggest drop-off points before proposing solutions."</p>
+
+        <h3>2. Analytical Questions</h3>
+        <p>"How would you measure success for this feature?"<br>"Walk me through how you'd prioritize these features."</p>
+
+        <p><strong>Your advantage:</strong> This is your home turf. Show depth that other candidates can't match.</p>
+
+        <h3>3. Execution Questions</h3>
+        <p>"Tell me about a time you shipped something."<br>"How do you handle disagreements with engineering?"</p>
+
+        <p><strong>Your advantage:</strong> Talk about your experience working with cross-functional teams, even if you weren't the formal "owner."</p>
+
+        <h3>4. Leadership Questions</h3>
+        <p>"How do you influence without authority?"<br>"How do you handle ambiguity?"</p>
+
+        <p><strong>Your advantage:</strong> Frame your analytical work as exercises in influence — you had to get stakeholders to act on your recommendations.</p>
+
+        <hr>
+
+        <h2>Common Mistakes (I Made Some of These)</h2>
+
+        <h3>Mistake 1: Over-indexing on Data</h3>
+
+        <p>Your data skills are a strength. But some new analyst-turned-PMs lean on data as a crutch, avoiding the harder work of customer empathy and strategic decision-making.</p>
+
+        <p>Data informs decisions. It doesn't make them for you.</p>
+
+        <h3>Mistake 2: Waiting for Permission</h3>
+
+        <p>I waited too long to start doing PM work. I thought I needed the title first. Wrong.</p>
+
+        <p>Start doing PM work now. The title follows the work.</p>
+
+        <h3>Mistake 3: Undervaluing Your Background</h3>
+
+        <p>Some analysts feel they need to hide their analytical past to be taken seriously as PMs. Wrong.</p>
+
+        <p>Your background is an asset. The best PMs I know are deeply comfortable with data. Lean into it.</p>
+
+        <h3>Mistake 4: Expecting Immediate Credibility</h3>
+
+        <p>PMs earn trust over time by shipping good products and making good decisions. Your analytical background gets you in the door. You still have to prove yourself.</p>
+
+        <p>Be patient. Be humble. Keep learning.</p>
+
+        <hr>
+
+        <h2>Is This Transition Right for You?</h2>
+
+        <p>Honest questions to ask yourself:</p>
+
+        <ul>
+            <li><strong>Do you enjoy ambiguity?</strong> PM work rarely has clear right answers. If you need certainty, you'll be frustrated.</li>
+            <li><strong>Do you like talking to people?</strong> If your ideal day is headphones on, solo analysis, PM will drain you.</li>
+            <li><strong>Can you handle accountability without control?</strong> PMs own outcomes but don't control the resources. This is stressful.</li>
+            <li><strong>Are you okay with slow feedback loops?</strong> Analysis gives you answers in hours or days. Products take months or years to prove out.</li>
+        </ul>
+
+        <p>If you answered "yes" to most of these, the transition is worth pursuing.</p>
+
+        <hr>
+
+        <h2>The Real Talk</h2>
+
+        <p>The transition from analyst to PM changed my career trajectory in ways I couldn't have predicted. I've shipped products used by Fortune 500 companies. I've led AI initiatives from concept to production. I've grown revenue by millions of dollars.</p>
+
+        <p>None of that would have happened if I'd stayed in the analytical track.</p>
+
+        <p>But here's the thing: being an analyst made me a better PM. The SQL skills, the statistical intuition, the comfort with data — these aren't things I left behind. They're my competitive advantage.</p>
+
+        <p>You don't become a PM despite your analytical background. You become a PM <em>because of it</em>.</p>
+
+        <hr>
+
+        <h2>Key Takeaways</h2>
+
+        <ol>
+            <li><strong>Data analysts have PM superpowers</strong> — don't undervalue your analytical background</li>
+            <li><strong>Close the gaps early</strong> — customer empathy, strategic thinking, communication</li>
+            <li><strong>Start doing PM work before you have the title</strong> — ship something small end-to-end</li>
+            <li><strong>Internal transfers are easier</strong> — leverage your existing reputation</li>
+            <li><strong>Your data skills are an asset, not baggage</strong> — the best PMs are data-fluent</li>
+        </ol>
+
+        <p>The path from analyst to PM isn't always straight, but it's increasingly common. The skills that made you a good analyst — curiosity, rigor, comfort with ambiguity — are the same skills that will make you a great PM.</p>
+
+        <p>Start today. Your future self will thank you.</p>
+
+        <div class="author-section">
+            <img src="../images/profile.jpg" alt="Raunak Pandey" class="author-avatar">
+            <div class="author-info">
+                <h4>Raunak Pandey</h4>
+                <p>Senior Product Manager at Quest Software. Transitioned from Risk Analyst at Amazon to Product Manager, now leading enterprise data and AI products. <a href="https://linkedin.com/in/pandeyraunak">Connect on LinkedIn</a>.</p>
+            </div>
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Raunak Pandey. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
