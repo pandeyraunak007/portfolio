@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLMs in Enterprise: What PMs Need to Know Before Shipping | Raunak Pandey</title>
+    <meta name="description" content="A practical guide for Product Managers navigating LLM integration — covering evaluation, guardrails, cost management, and setting realistic expectations.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --bg-card: #141414;
+            --accent: #d4a039;
+            --accent-dim: rgba(212, 160, 57, 0.15);
+            --accent-glow: rgba(212, 160, 57, 0.3);
+            --text-primary: #f5f5f5;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --border: #2a2a2a;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'DM Sans', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        /* Blog Header */
+        .blog-header {
+            padding: 160px 0 80px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .blog-header .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .blog-category {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--bg-primary);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+        }
+
+        .blog-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .blog-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .blog-cover {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-top: 48px;
+        }
+
+        /* Blog Content */
+        .blog-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        .blog-content h2 {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 48px 0 24px;
+            color: var(--text-primary);
+        }
+
+        .blog-content h3 {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin: 36px 0 16px;
+            color: var(--text-primary);
+        }
+
+        .blog-content p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .blog-content ul, .blog-content ol {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            padding-left: 24px;
+        }
+
+        .blog-content li {
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .blog-content blockquote {
+            border-left: 3px solid var(--accent);
+            padding-left: 24px;
+            margin: 32px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .blog-content code {
+            font-family: var(--font-mono);
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .blog-content pre {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        .blog-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .highlight-box {
+            background: var(--accent-dim);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin: 32px 0;
+        }
+
+        .highlight-box h4 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            color: var(--text-primary);
+        }
+
+        /* Author Section */
+        .author-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 64px;
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+        }
+
+        .author-info h4 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* Footer */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        footer .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .blog-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .author-section {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="../index.html" class="logo">RP<span>.</span></a>
+            <a href="../index.html#blogs" class="back-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to Blogs
+            </a>
+        </div>
+    </nav>
+
+    <!-- Blog Header -->
+    <header class="blog-header">
+        <div class="container">
+            <span class="blog-category">AI & Product</span>
+            <h1 class="blog-title">LLMs in Enterprise: What PMs Need to Know Before Shipping</h1>
+            <div class="blog-meta">
+                <div class="blog-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    8 min read
+                </div>
+                <div class="blog-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    December 2024
+                </div>
+                <div class="blog-meta-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Raunak Pandey
+                </div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1200&q=80" alt="AI and Enterprise LLMs" class="blog-cover">
+        </div>
+    </header>
+
+    <!-- Blog Content -->
+    <article class="blog-content">
+        <p>Every enterprise product team is being asked the same question: "How are we using AI?" As a PM who has shipped LLM-powered features in enterprise data products, I've learned that the gap between a compelling demo and a production-ready feature is wider than most stakeholders realize.</p>
+
+        <p>This guide distills what I've learned from integrating LLMs into enterprise workflows — the hard truths, practical frameworks, and decision points that will determine whether your AI feature succeeds or becomes another failed experiment.</p>
+
+        <h2>The Enterprise LLM Reality Check</h2>
+
+        <p>Before diving into implementation, let's address the elephant in the room: LLMs are not magic. They are probabilistic systems that excel at certain tasks and fail spectacularly at others.</p>
+
+        <div class="highlight-box">
+            <h4>Key Insight</h4>
+            <p>The best LLM features in enterprise products are those that augment human judgment, not replace it. Design for human-in-the-loop from day one.</p>
+        </div>
+
+        <h3>What LLMs Are Good At</h3>
+        <ul>
+            <li><strong>Text transformation:</strong> Summarization, reformatting, translation between formats</li>
+            <li><strong>First-draft generation:</strong> Creating starting points that humans refine</li>
+            <li><strong>Pattern recognition in text:</strong> Classification, entity extraction, sentiment analysis</li>
+            <li><strong>Explaining complex concepts:</strong> Making documentation accessible</li>
+        </ul>
+
+        <h3>What LLMs Are Bad At</h3>
+        <ul>
+            <li><strong>Factual accuracy:</strong> They confidently hallucinate facts, especially domain-specific ones</li>
+            <li><strong>Deterministic outputs:</strong> Same input can yield different outputs</li>
+            <li><strong>Real-time data:</strong> They don't know what happened after their training cutoff</li>
+            <li><strong>Complex reasoning:</strong> Multi-step logic chains often break down</li>
+        </ul>
+
+        <h2>The PM's Evaluation Framework</h2>
+
+        <p>Before committing to an LLM-powered feature, run it through this framework:</p>
+
+        <h3>1. The "So What" Test</h3>
+        <p>Ask yourself: If this feature works perfectly, does it meaningfully change user outcomes? I've seen teams spend months building AI features that save users 30 seconds on a task they perform monthly. Calculate the actual value delivered.</p>
+
+        <h3>2. The Failure Mode Analysis</h3>
+        <p>When (not if) the LLM produces incorrect output, what happens?</p>
+        <ul>
+            <li><strong>Low stakes:</strong> User sees a bad recommendation, clicks away</li>
+            <li><strong>Medium stakes:</strong> User wastes time acting on wrong information</li>
+            <li><strong>High stakes:</strong> Financial loss, compliance violation, data corruption</li>
+        </ul>
+        <p>Your guardrails should be proportional to the stakes. For high-stakes applications, you need human review before any action is taken.</p>
+
+        <h3>3. The Data Availability Check</h3>
+        <p>LLMs need context to be useful. Do you have:</p>
+        <ul>
+            <li>Clean, structured data to feed as context?</li>
+            <li>Domain-specific examples for few-shot prompting?</li>
+            <li>A feedback loop to capture user corrections?</li>
+        </ul>
+
+        <h2>Cost Management: The Hidden Killer</h2>
+
+        <p>Enterprise LLM costs can spiral quickly. Here's what I've learned about managing them:</p>
+
+        <h3>Token Economics</h3>
+        <p>Every API call has a cost based on input + output tokens. A seemingly simple feature that processes documents can easily cost $0.10-$1.00 per user interaction with GPT-4.</p>
+
+        <pre><code>Monthly Cost = (Avg Tokens per Call) × (Calls per User) × (Active Users) × (Price per Token)
+
+Example:
+2,000 tokens × 10 calls/day × 1,000 users × 30 days × $0.00003 = $18,000/month</code></pre>
+
+        <h3>Cost Optimization Strategies</h3>
+        <ul>
+            <li><strong>Model tiering:</strong> Use cheaper models (GPT-3.5, Claude Haiku) for simple tasks, reserve expensive models for complex ones</li>
+            <li><strong>Caching:</strong> Cache responses for identical or similar queries</li>
+            <li><strong>Prompt optimization:</strong> Shorter, more efficient prompts reduce costs</li>
+            <li><strong>Rate limiting:</strong> Implement usage caps per user/organization</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h4>Pro Tip</h4>
+            <p>Build cost monitoring from day one. Track cost per feature, per user, per organization. You'll need this data when finance asks why your cloud bill tripled.</p>
+        </div>
+
+        <h2>Designing Effective Guardrails</h2>
+
+        <p>Guardrails aren't just about preventing bad outputs — they're about building user trust.</p>
+
+        <h3>Input Guardrails</h3>
+        <ul>
+            <li><strong>Input validation:</strong> Check for prompt injection attempts, PII, and out-of-scope requests</li>
+            <li><strong>Context limits:</strong> Truncate or summarize inputs that exceed token limits</li>
+            <li><strong>User intent classification:</strong> Route requests to appropriate handlers</li>
+        </ul>
+
+        <h3>Output Guardrails</h3>
+        <ul>
+            <li><strong>Confidence thresholds:</strong> If the model isn't confident, say so</li>
+            <li><strong>Fact-checking layer:</strong> Validate generated facts against your data</li>
+            <li><strong>Format validation:</strong> Ensure outputs match expected schemas</li>
+            <li><strong>Content filtering:</strong> Block inappropriate or off-brand content</li>
+        </ul>
+
+        <h3>User Experience Guardrails</h3>
+        <ul>
+            <li><strong>Transparency:</strong> Always indicate when content is AI-generated</li>
+            <li><strong>Edit affordances:</strong> Make it easy for users to modify AI outputs</li>
+            <li><strong>Feedback mechanisms:</strong> Let users report bad outputs</li>
+            <li><strong>Graceful degradation:</strong> Have fallbacks when AI fails</li>
+        </ul>
+
+        <h2>Setting Realistic Expectations</h2>
+
+        <p>The biggest risk with LLM features isn't technical failure — it's expectation mismatch.</p>
+
+        <h3>With Stakeholders</h3>
+        <p>Be explicit about what the AI can and cannot do. I use this framing: "This feature will get it right 80% of the time, which means users need to verify every output. The value is in accelerating the starting point, not eliminating human judgment."</p>
+
+        <h3>With Users</h3>
+        <p>Set expectations in the UI itself:</p>
+        <ul>
+            <li>"AI-generated draft — please review before using"</li>
+            <li>"Based on available data as of [date]"</li>
+            <li>"Suggestions may contain errors"</li>
+        </ul>
+
+        <h3>With Yourself</h3>
+        <p>Your first version will be worse than you hope. Plan for iteration. The teams that succeed with LLMs are the ones that ship, learn, and improve — not the ones that wait for perfection.</p>
+
+        <h2>The Shipping Checklist</h2>
+
+        <p>Before you ship an LLM feature, verify:</p>
+
+        <ol>
+            <li><strong>Value is clear:</strong> Users understand what this feature does for them</li>
+            <li><strong>Failure is safe:</strong> Bad outputs don't cause irreversible harm</li>
+            <li><strong>Costs are bounded:</strong> You have rate limits and monitoring in place</li>
+            <li><strong>Feedback exists:</strong> Users can report issues and you can track them</li>
+            <li><strong>Iteration is possible:</strong> You can update prompts/models without redeploying</li>
+            <li><strong>Legal has signed off:</strong> Data usage complies with your terms and regulations</li>
+        </ol>
+
+        <h2>Looking Ahead</h2>
+
+        <p>The LLM landscape is evolving rapidly. What's expensive today will be cheap tomorrow. What's impossible now may be trivial in six months. Build your features with this in mind:</p>
+
+        <ul>
+            <li>Abstract your LLM calls so you can swap models easily</li>
+            <li>Collect data on what works and what doesn't</li>
+            <li>Stay close to your users — their needs will guide your iterations</li>
+        </ul>
+
+        <p>The PMs who will win in the AI era aren't the ones who ship the most AI features — they're the ones who ship AI features that actually solve problems. Focus on value, not novelty.</p>
+
+        <!-- Author Section -->
+        <div class="author-section">
+            <img src="../images/profile.jpg" alt="Raunak Pandey" class="author-avatar">
+            <div class="author-info">
+                <h4>Raunak Pandey</h4>
+                <p>Product Leader with 10+ years building B2B SaaS platforms across data, analytics, and AI. Currently leading product at Quest Software.</p>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Raunak Pandey. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
